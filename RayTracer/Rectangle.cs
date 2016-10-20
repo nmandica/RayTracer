@@ -113,6 +113,12 @@ namespace RayTracer
             return exists;
         }
 
+        /// <summary>
+        /// Calculate the intesection point between the ray and the plane of the rectangle.
+        /// </summary>
+        /// <param name="ray">The ray to check</param>
+        /// <param name="intersectionPoint">The result intersection point</param>
+        /// <returns>True if the intersection is in the rectangle</returns>
         public bool Intersects(Ray ray, ref Vector3D intersectionPoint)
         {
             // Do the intersection test as for a Plane.
