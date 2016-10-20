@@ -1,7 +1,5 @@
 
 *.exe
-
 RayTracer/bin/*
-
 RayTracer/obj/*
 .vs/RayTracer/v14/.suo
