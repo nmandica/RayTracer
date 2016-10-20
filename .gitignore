@@ -1,20 +1,6 @@
 
 *.exe
 
-RayTracer/bin/Debug/RayTracer.exe.config
+RayTracer/bin/*
 
-RayTracer/bin/Debug/RayTracer.vshost.exe.config
-
-RayTracer/bin/Debug/RayTracer.vshost.exe.manifest
-
-RayTracer/obj/Debug/DesignTimeResolveAssemblyReferences.cache
-
-RayTracer/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-
-RayTracer/obj/Debug/RayTracer.csproj.FileListAbsolute.txt
-
-RayTracer/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-
-RayTracer/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-
-RayTracer/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+RayTracer/obj/*
