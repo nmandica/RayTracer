@@ -6,6 +6,20 @@
   "Geometries": [
     {
       "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "-100,-100,0",
+      "Point2": "100,-100,0",
+      "Point3": "100,100,0",
+      "Point4": "-100,100,0",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "Phong": 0
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
       "Point1": "-1,1,10",
       "Point2": "3,4,10",
       "Point3": "4.2048,2.3936,10",
@@ -21,16 +35,8 @@
   ],
   "Lights": [
     {
-      "Color": "Blue",
+      "Color": "White",
       "Location": "830,-50,-500"
-    },
-    {
-      "Color": "Green",
-      "Location": "-70,-50,-500"
-    },
-    {
-      "Color": "Red",
-      "Location": "380,1029.42286340599,-500"
     }
   ]
 }
