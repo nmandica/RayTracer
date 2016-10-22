@@ -10,7 +10,7 @@ namespace RayTracer
     /// <summary>
     /// Rectangle class
     /// </summary>
-    class Rectangle
+    class Rectangle: Geometry
     {
         public readonly Point3D Point1;
         public readonly Point3D Point2;
@@ -113,13 +113,15 @@ namespace RayTracer
             return exists;
         }
 
+        override public Vector3D GetSurfaceNormalAtPoint(Vector3D point) => Normal;
+
         /// <summary>
         /// Calculate the intesection point between the ray and the plane of the rectangle.
         /// </summary>
         /// <param name="ray">The ray to check</param>
         /// <param name="intersectionPoint">The result intersection point</param>
         /// <returns>True if the intersection is in the rectangle</returns>
-        public bool Intersects(Ray ray, ref Vector3D intersectionPoint)
+        override public bool Intersects(Ray ray, ref Vector3D intersectionPoint)
         {
             // Do the intersection test as for a Plane.
             if (Vector3D.DotProduct(Normal, ray.Direction) != 0)

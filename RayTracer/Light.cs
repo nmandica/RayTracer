@@ -13,7 +13,7 @@ namespace RayTracer
     /// </summary>
     public class Light
     {
-        private Color m_Color = Color.White;
+        private Color color = Color.White;
 
         /// <summary>
         /// Light color
@@ -22,11 +22,11 @@ namespace RayTracer
         {
             get
             {
-                return m_Color;
+                return color;
             }
             set
             {
-                m_Color = value;
+                color = value;
             }
         }
 
