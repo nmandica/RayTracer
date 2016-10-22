@@ -1,0 +1,36 @@
+{
+  "Camera": {
+    "Location": "380,250,-2500",
+    "LookAt": "0,0,0"
+  },
+  "Geometries": [
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "-1,1,10",
+      "Point2": "3,4,10",
+      "Point3": "4.2048,2.3936,10",
+      "Point4": "0.2048,-0.6064,10",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 0,
+        "b": 0,
+        "Phong": 0.5
+      }
+    }
+  ],
+  "Lights": [
+    {
+      "Color": "Blue",
+      "Location": "830,-50,-500"
+    },
+    {
+      "Color": "Green",
+      "Location": "-70,-50,-500"
+    },
+    {
+      "Color": "Red",
+      "Location": "380,1029.42286340599,-500"
+    }
+  ]
+}

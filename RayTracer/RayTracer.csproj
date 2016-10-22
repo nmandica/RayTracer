@@ -54,7 +54,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Geometry.cs" />
-    <Compile Include="IMaterial.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="Light.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

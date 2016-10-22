@@ -12,6 +12,9 @@ namespace RayTracer
         void GetColor(Vector3D point, ref int r, ref int g, ref int b);
     }
 
+    /// <summary>
+    /// Solid color material
+    /// </summary>
     public class SolidColor : IMaterial
     {
         public int r, g, b;
@@ -23,6 +26,12 @@ namespace RayTracer
         public static SolidColor Green = new SolidColor(0, 255, 0);
         public static SolidColor Blue = new SolidColor(0, 0, 255);
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="r">Red channel value</param>
+        /// <param name="g">Green channel value</param>
+        /// <param name="b">Blue channel value</param>
         public SolidColor(int r, int g, int b)
         {
             this.r = r;
