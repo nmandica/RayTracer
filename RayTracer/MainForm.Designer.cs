@@ -30,7 +30,7 @@
         {
             this.ControlPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.RayDepthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.GoButton = new System.Windows.Forms.Button();
             this.PictureBox = new System.Windows.Forms.PictureBox();
             this.tsslblScene = new System.Windows.Forms.ToolStripStatusLabel();
@@ -39,19 +39,20 @@
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.LoadButton = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RayDepthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ControlPanel
             // 
+            this.ControlPanel.Controls.Add(this.LoadButton);
             this.ControlPanel.Controls.Add(this.label1);
-            this.ControlPanel.Controls.Add(this.numericUpDown1);
+            this.ControlPanel.Controls.Add(this.RayDepthNumericUpDown);
             this.ControlPanel.Controls.Add(this.GoButton);
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ControlPanel.Enabled = false;
             this.ControlPanel.Location = new System.Drawing.Point(0, 0);
             this.ControlPanel.Name = "ControlPanel";
             this.ControlPanel.Size = new System.Drawing.Size(971, 30);
@@ -66,30 +67,32 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Ray Depth";
             // 
-            // numericUpDown1
+            // RayDepthNumericUpDown
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(65, 5);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.RayDepthNumericUpDown.Location = new System.Drawing.Point(65, 5);
+            this.RayDepthNumericUpDown.Maximum = new decimal(new int[] {
             15,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.RayDepthNumericUpDown.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(45, 20);
-            this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.RayDepthNumericUpDown.Name = "RayDepthNumericUpDown";
+            this.RayDepthNumericUpDown.Size = new System.Drawing.Size(45, 20);
+            this.RayDepthNumericUpDown.TabIndex = 2;
+            this.RayDepthNumericUpDown.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            this.RayDepthNumericUpDown.ValueChanged += new System.EventHandler(this.RayDepthNumericUpDown_ValueChanged);
             // 
             // GoButton
             // 
+            this.GoButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.GoButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.GoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GoButton.ForeColor = System.Drawing.Color.LimeGreen;
@@ -99,6 +102,7 @@
             this.GoButton.TabIndex = 1;
             this.GoButton.Text = "Go";
             this.GoButton.UseVisualStyleBackColor = true;
+            this.GoButton.Click += new System.EventHandler(this.GoButton_Click);
             // 
             // PictureBox
             // 
@@ -144,7 +148,7 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.tsslblScene,
@@ -156,6 +160,20 @@
             this.statusStrip1.Size = new System.Drawing.Size(971, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // LoadButton
+            // 
+            this.LoadButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.LoadButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.LoadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LoadButton.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.LoadButton.Location = new System.Drawing.Point(821, 0);
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(75, 30);
+            this.LoadButton.TabIndex = 4;
+            this.LoadButton.Text = "Load";
+            this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
             // 
             // MainForm
             // 
@@ -171,7 +189,7 @@
             this.Text = "Ray Tracer";
             this.ControlPanel.ResumeLayout(false);
             this.ControlPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RayDepthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -184,7 +202,7 @@
 
         private System.Windows.Forms.Panel ControlPanel;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown RayDepthNumericUpDown;
         private System.Windows.Forms.Button GoButton;
         private System.Windows.Forms.PictureBox PictureBox;
         private System.Windows.Forms.ToolStripStatusLabel tsslblScene;
@@ -193,6 +211,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.Button LoadButton;
     }
 }
 

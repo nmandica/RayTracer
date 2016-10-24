@@ -72,6 +72,8 @@ namespace RayTracer
         public void Raytrace(Image image, Action onUpdate, Action onFinished)
         {
             Size = new Size(image.Width, image.Height);
+            Scene.Camera.Width = image.Width;
+            Scene.Camera.Height = image.Height;
             updateCallback = onUpdate;
             graphic = Graphics.FromImage(image);
 
@@ -84,10 +86,12 @@ namespace RayTracer
         private ColorAccumulator CalculateLighting(HitInfo info, int count)
         {
             ColorAccumulator ca = new ColorAccumulator();
+
             foreach (Light lt in Scene.Lights)
             {
                 GetColor(info, lt, ca, count);
             }
+
             return ca;
         }
 
@@ -103,6 +107,7 @@ namespace RayTracer
             ColorAccumulator ca = CastRay(ray, 1);
 
             SolidBrush brush = new SolidBrush(Color.FromArgb(ca.accumR, ca.accumG, ca.accumB));
+
             lock (graphicsLock)
             {
                 graphic.FillRectangle(brush, col, row, 1, 1);
@@ -139,6 +144,7 @@ namespace RayTracer
             Vector3D intPoint = new Vector3D(double.MaxValue, double.MaxValue, double.MaxValue);
             HitInfo info = new HitInfo(null, intPoint, ray);
             double dist = double.MaxValue;
+
             foreach (Geometry geometry in Scene.Geometries)
             {
                 if (geometry != originator && geometry.Intersects(ray, ref intPoint))
@@ -249,6 +255,7 @@ namespace RayTracer
             {
                 return;
             }
+
             for (int i = 0; i < Size.Width; i++)
             {
                 CastCameraRay(i, row);

@@ -1,42 +1,79 @@
 {
   "Camera": {
-    "Location": "380,250,-2500",
-    "LookAt": "0,0,0"
+    "Location": "50,25,1000",
+    "LookAt": "0,0,0",
+    "FocalDistance": 0.1
   },
   "Geometries": [
     {
       "$type": "RayTracer.Rectangle, RayTracer",
-      "Point1": "-100,-100,0",
-      "Point2": "100,-100,0",
-      "Point3": "100,100,0",
-      "Point4": "-100,100,0",
+      "Point1": "-200,-200,0",
+      "Point2": "200,-200,0",
+      "Point3": "200,200,0",
+      "Point4": "-200,200,0",
       "Material": {
         "$type": "RayTracer.SolidColor, RayTracer",
-        "r": 255,
-        "g": 255,
+        "r": 40,
+        "g": 30,
         "b": 255,
-        "Phong": 0
+        "Phong": 0.6
       }
     },
     {
       "$type": "RayTracer.Rectangle, RayTracer",
-      "Point1": "-1,1,10",
-      "Point2": "3,4,10",
-      "Point3": "4.2048,2.3936,10",
-      "Point4": "0.2048,-0.6064,10",
+      "Point1": "-200,10,-200",
+      "Point2": "-200,10,200",
+      "Point3": "200,10,200",
+      "Point4": "200,10,-200",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 0,
+        "g": 255,
+        "b": 255,
+        "Phong": 0.4
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "-2,-2,1",
+      "Point2": "5,-2,1",
+      "Point3": "5,5,1",
+      "Point4": "-2,5,1",
       "Material": {
         "$type": "RayTracer.SolidColor, RayTracer",
         "r": 255,
         "g": 0,
         "b": 0,
-        "Phong": 0.5
+        "Phong": 0.1
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "10,30,2",
+      "Point2": "50,60,2",
+      "Point3": "62.048,43.936,2",
+      "Point4": "22.048,13.936,2",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 0,
+        "g": 255,
+        "b": 0,
+        "Phong": 0.1
       }
     }
   ],
   "Lights": [
     {
       "Color": "White",
-      "Location": "830,-50,-500"
+      "Location": "0,0,500"
+    },
+    {
+      "Color": "Red",
+      "Location": "10,10,100"
+    },
+    {
+      "Color": "Red",
+      "Location": "-10,-10,100"
     }
   ]
 }
