@@ -17,6 +17,8 @@ namespace RayTracer
         public readonly Point3D Point3;
         public readonly Point3D Point4;
 
+        private Vector3D normal;
+
         /// <summary>
         /// Normal of the rectangle
         /// </summary>
@@ -24,9 +26,6 @@ namespace RayTracer
         {
             get
             {
-                Vector3D normal = Vector3D.CrossProduct(Point2 - Point1, Point3 - Point2);
-                normal.Normalize();
-
                 return normal;
             }
         }
@@ -75,6 +74,9 @@ namespace RayTracer
             Point2 = point2;
             Point3 = point3;
             Point4 = point4;
+
+            normal = Vector3D.CrossProduct(Point2 - Point1, Point3 - Point2);
+            normal.Normalize();
         }
 
         /// <summary>
@@ -123,9 +125,16 @@ namespace RayTracer
         /// <returns>True if the intersection is in the rectangle</returns>
         override public bool Intersects(Ray ray, ref Vector3D intersectionPoint)
         {
+            var normalDotProduct = Vector3D.DotProduct(Normal, ray.Direction);
             // Do the intersection test as for a Plane.
-            if (Vector3D.DotProduct(Normal, ray.Direction) != 0)
+            if (normalDotProduct != 0)
             {
+                //Give the right orientation to the normal vector
+                if (normalDotProduct > 0)
+                {
+                    normal = -Normal;
+                }
+
                 Vector3D Point = (Vector3D) Point1;
                 double t = (Vector3D.DotProduct(Normal, (Vector3D.Subtract(Point, ray.Source)))) / (Vector3D.DotProduct(Normal, ray.Direction));
 

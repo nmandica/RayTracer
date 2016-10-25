@@ -14,22 +14,22 @@ namespace RayTracer
 {
     public partial class MainForm : Form
     {
-        private Raytracer rt;
-        private Scene sc;
-        private DateTime start;
+        private Raytracer rayTracer;
+        private Scene scene;
+        private DateTime startTime;
 
         public MainForm()
         {
             InitializeComponent();
-            rt = new Raytracer();
-            rt.OnProgress += new Raytracer.ProgressHandler(rt_OnProgress);
-            RayDepthNumericUpDown.Value = rt.RayDepth = 3;
+            rayTracer = new Raytracer();
+            rayTracer.OnProgress += new Raytracer.ProgressHandler(rt_OnProgress);
+            RayDepthNumericUpDown.Value = rayTracer.RayDepth = 3;
             RayDepthNumericUpDown.ValueChanged += new EventHandler(RayDepthNumericUpDown_ValueChanged);
         }
 
         void RayDepthNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            rt.RayDepth = (int)RayDepthNumericUpDown.Value;
+            rayTracer.RayDepth = (int)RayDepthNumericUpDown.Value;
         }
 
         void rt_OnProgress(double percent)
@@ -37,14 +37,14 @@ namespace RayTracer
             Invoke(new Action(() =>
             {
                 toolStripProgressBar1.Value = (int)(Math.Ceiling(100 * percent));
-                var elapsed = DateTime.Now - start;
+                var elapsed = DateTime.Now - startTime;
                 toolStripStatusLabel4.Text = string.Format("{0}m {1}s {2}ms", elapsed.Minutes, elapsed.Seconds, elapsed.Milliseconds);
             }));
         }
 
         private void GoButton_Click(object sender, EventArgs e)
         {
-            start = DateTime.Now;
+            startTime = DateTime.Now;
             RayTrace();
         }
 
@@ -55,15 +55,12 @@ namespace RayTracer
             PictureBox.Image = new Bitmap(PictureBox.Size.Width, PictureBox.Size.Height);
             PictureBox.Update();
 
-            rt.Size = PictureBox.Image.Size;
+            rayTracer.Size = PictureBox.Image.Size;
 
-            int centerX = PictureBox.Width / 2;
-            int centerY = PictureBox.Height / 2;
+            rayTracer.Scene = scene;
+            rayTracer.BackColor = Color.Black;
 
-            rt.Scene = sc;
-            rt.BackColor = Color.Black;
-
-            rt.Raytrace(PictureBox.Image, () =>
+            rayTracer.Raytrace(PictureBox.Image, () =>
             {
                 Invoke(new Action(() =>
                 {
@@ -86,7 +83,7 @@ namespace RayTracer
             {
                 try
                 {
-                    sc = Scene.Load(ofd.FileName);
+                    scene = Scene.Load(ofd.FileName);
                 }
                 catch (Exception ex)
                 {

@@ -74,6 +74,8 @@ namespace RayTracer
             Size = new Size(image.Width, image.Height);
             Scene.Camera.Width = image.Width;
             Scene.Camera.Height = image.Height;
+            Scene.Camera.Setup();
+
             updateCallback = onUpdate;
             graphic = Graphics.FromImage(image);
 
@@ -85,14 +87,14 @@ namespace RayTracer
 
         private ColorAccumulator CalculateLighting(HitInfo info, int count)
         {
-            ColorAccumulator ca = new ColorAccumulator();
+            ColorAccumulator colorAccumulator = new ColorAccumulator();
 
-            foreach (Light lt in Scene.Lights)
+            foreach (Light light in Scene.Lights)
             {
-                GetColor(info, lt, ca, count);
+                GetColor(info, light, colorAccumulator, count);
             }
 
-            return ca;
+            return colorAccumulator;
         }
 
         private void CastCameraRay(int col, int row)
@@ -104,9 +106,9 @@ namespace RayTracer
 
             Ray ray = Scene.Camera.GetCameraRay(col, row);
 
-            ColorAccumulator ca = CastRay(ray, 1);
+            ColorAccumulator colorAccu = CastRay(ray, 1);
 
-            SolidBrush brush = new SolidBrush(Color.FromArgb(ca.accumR, ca.accumG, ca.accumB));
+            SolidBrush brush = new SolidBrush(Color.FromArgb(colorAccu.accumR, colorAccu.accumG, colorAccu.accumB));
 
             lock (graphicsLock)
             {
@@ -121,38 +123,38 @@ namespace RayTracer
                 return null;
             }
 
-            ColorAccumulator ca = null;
+            ColorAccumulator colorAccumulator = null;
             HitInfo info = FindHitObject(ray);
 
             if (info.hitObj != null)
             {
-                ca = CalculateLighting(info, count);
-                ca.Clamp();
+                colorAccumulator = CalculateLighting(info, count);
+                colorAccumulator.Clamp();
             }
             else
             {
-                ca = new ColorAccumulator(BackColor.R, BackColor.G, BackColor.B);
+                colorAccumulator = new ColorAccumulator(BackColor.R, BackColor.G, BackColor.B);
             }
 
-            return ca;
+            return colorAccumulator;
         }
 
         private HitInfo FindHitObject(Ray ray) => FindHitObject(ray, null, HitMode.Closest);
 
         private HitInfo FindHitObject(Ray ray, Geometry originator, HitMode mode)
         {
-            Vector3D intPoint = new Vector3D(double.MaxValue, double.MaxValue, double.MaxValue);
-            HitInfo info = new HitInfo(null, intPoint, ray);
+            Vector3D intersectionPoint = new Vector3D(double.MaxValue, double.MaxValue, double.MaxValue);
+            HitInfo info = new HitInfo(null, intersectionPoint, ray);
             double dist = double.MaxValue;
 
             foreach (Geometry geometry in Scene.Geometries)
             {
-                if (geometry != originator && geometry.Intersects(ray, ref intPoint))
+                if (geometry != originator && geometry.Intersects(ray, ref intersectionPoint))
                 {
-                    double distToObj = Vector3D.Subtract(ray.Source, intPoint).Length;
+                    double distToObj = Vector3D.Subtract(ray.Source, intersectionPoint).Length;
                     if (distToObj < dist)
                     {
-                        info.hitPoint = intPoint;
+                        info.hitPoint = intersectionPoint;
                         dist = distToObj;
                         info.hitObj = geometry;
                         if (mode == HitMode.Any)

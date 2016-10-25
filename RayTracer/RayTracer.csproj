@@ -68,6 +68,7 @@
     <Compile Include="RayTracer.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="Scene.cs" />
+    <Compile Include="Sphere.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,10 +1,22 @@
 {
   "Camera": {
-    "Location": "50,25,1000",
+    "Location": "0,20,50",
     "LookAt": "0,0,0",
-    "FocalDistance": 0.1
+    "FocalLength": 5
   },
   "Geometries": [
+    {
+      "$type": "RayTracer.Sphere, RayTracer",
+      "Center": "0,0,10",
+      "Radius": 10.0,
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 0,
+        "b": 0,
+        "Phong": 0.0
+      }
+    },
     {
       "$type": "RayTracer.Rectangle, RayTracer",
       "Point1": "-200,-200,0",
@@ -13,67 +25,17 @@
       "Point4": "-200,200,0",
       "Material": {
         "$type": "RayTracer.SolidColor, RayTracer",
-        "r": 40,
-        "g": 30,
-        "b": 255,
-        "Phong": 0.6
-      }
-    },
-    {
-      "$type": "RayTracer.Rectangle, RayTracer",
-      "Point1": "-200,10,-200",
-      "Point2": "-200,10,200",
-      "Point3": "200,10,200",
-      "Point4": "200,10,-200",
-      "Material": {
-        "$type": "RayTracer.SolidColor, RayTracer",
         "r": 0,
-        "g": 255,
-        "b": 255,
-        "Phong": 0.4
-      }
-    },
-    {
-      "$type": "RayTracer.Rectangle, RayTracer",
-      "Point1": "-2,-2,1",
-      "Point2": "5,-2,1",
-      "Point3": "5,5,1",
-      "Point4": "-2,5,1",
-      "Material": {
-        "$type": "RayTracer.SolidColor, RayTracer",
-        "r": 255,
         "g": 0,
-        "b": 0,
-        "Phong": 0.1
-      }
-    },
-    {
-      "$type": "RayTracer.Rectangle, RayTracer",
-      "Point1": "10,30,2",
-      "Point2": "50,60,2",
-      "Point3": "62.048,43.936,2",
-      "Point4": "22.048,13.936,2",
-      "Material": {
-        "$type": "RayTracer.SolidColor, RayTracer",
-        "r": 0,
-        "g": 255,
-        "b": 0,
-        "Phong": 0.1
+        "b": 255,
+        "Phong": 0.0
       }
     }
   ],
   "Lights": [
     {
       "Color": "White",
-      "Location": "0,0,500"
-    },
-    {
-      "Color": "Red",
-      "Location": "10,10,100"
-    },
-    {
-      "Color": "Red",
-      "Location": "-10,-10,100"
+      "Location": "300,40,300"
     }
   ]
 }

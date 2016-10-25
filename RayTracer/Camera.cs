@@ -69,8 +69,7 @@ namespace RayTracer
         /// </summary>
         private void Init()
         {
-            viewDirection = LookAt - Location;
-            viewDirection.Normalize();
+            
         }
 
         /// <summary>
@@ -78,6 +77,9 @@ namespace RayTracer
         /// </summary>
         public void Setup()
         {
+            viewDirection = LookAt - Location;
+            viewDirection.Normalize();
+
             U = Vector3D.CrossProduct(viewDirection, new Vector3D(0, 1, 0));
             V = Vector3D.CrossProduct(U, viewDirection);
 
@@ -87,9 +89,17 @@ namespace RayTracer
             double viewPlaneWidth = Width / FocalLength;
             double viewPlaneHeight = Height / FocalLength;
 
-            viewPlaneTopLeftPoint = LookAt + V * (viewPlaneHeight / 2) - U * (viewPlaneWidth / 2);
+            viewPlaneTopLeftPoint = LookAt - V * (viewPlaneHeight / 2) - U * (viewPlaneWidth / 2);
             xIncVector = (U * viewPlaneWidth) / Width;
             yIncVector = (V * viewPlaneHeight) / Height;
+
+            Console.WriteLine("xIncVec : " + xIncVector.ToString());
+            Console.WriteLine("yIncVec : " + yIncVector.ToString());
+            Console.WriteLine("Width : " + Width.ToString());
+            Console.WriteLine("Height : " + Height.ToString());
+
+
+
         }
 
         /// <summary>
@@ -102,6 +112,7 @@ namespace RayTracer
         {
             var viewPlanePoint = viewPlaneTopLeftPoint + x * xIncVector + y * yIncVector;
             var castRay = viewPlanePoint - Location;
+            //Console.WriteLine("(" + x.ToString() + ", " + y.ToString() + ") : " + viewPlanePoint.ToString());
             return new Ray(Location, castRay);
         }
     }
