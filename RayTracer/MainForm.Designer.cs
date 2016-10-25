@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ControlPanel = new System.Windows.Forms.Panel();
             this.LoadButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -54,7 +55,7 @@
             this.ControlPanel.Controls.Add(this.GoButton);
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.ControlPanel.Location = new System.Drawing.Point(0, 0);
-            this.ControlPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.ControlPanel.Margin = new System.Windows.Forms.Padding(6);
             this.ControlPanel.Name = "ControlPanel";
             this.ControlPanel.Size = new System.Drawing.Size(1774, 58);
             this.ControlPanel.TabIndex = 6;
@@ -66,7 +67,7 @@
             this.LoadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadButton.ForeColor = System.Drawing.Color.DodgerBlue;
             this.LoadButton.Location = new System.Drawing.Point(1474, 0);
-            this.LoadButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.LoadButton.Margin = new System.Windows.Forms.Padding(6);
             this.LoadButton.Name = "LoadButton";
             this.LoadButton.Size = new System.Drawing.Size(150, 58);
             this.LoadButton.TabIndex = 4;
@@ -87,7 +88,7 @@
             // RayDepthNumericUpDown
             // 
             this.RayDepthNumericUpDown.Location = new System.Drawing.Point(130, 10);
-            this.RayDepthNumericUpDown.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.RayDepthNumericUpDown.Margin = new System.Windows.Forms.Padding(6);
             this.RayDepthNumericUpDown.Maximum = new decimal(new int[] {
             15,
             0,
@@ -115,7 +116,7 @@
             this.GoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GoButton.ForeColor = System.Drawing.Color.LimeGreen;
             this.GoButton.Location = new System.Drawing.Point(1624, 0);
-            this.GoButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.GoButton.Margin = new System.Windows.Forms.Padding(6);
             this.GoButton.Name = "GoButton";
             this.GoButton.Size = new System.Drawing.Size(150, 58);
             this.GoButton.TabIndex = 1;
@@ -128,7 +129,7 @@
             this.PictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.PictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PictureBox.Location = new System.Drawing.Point(0, 0);
-            this.PictureBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.PictureBox.Margin = new System.Windows.Forms.Padding(6);
             this.PictureBox.Name = "PictureBox";
             this.PictureBox.Size = new System.Drawing.Size(1774, 1292);
             this.PictureBox.TabIndex = 5;
@@ -170,12 +171,6 @@
             // 
             this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.tsslblScene,
-            this.toolStripProgressBar1,
-            this.toolStripStatusLabel3,
-            this.toolStripStatusLabel4});
             this.statusStrip1.Location = new System.Drawing.Point(0, 1292);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
@@ -191,7 +186,8 @@
             this.Controls.Add(this.ControlPanel);
             this.Controls.Add(this.PictureBox);
             this.Controls.Add(this.statusStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ray Tracer";
