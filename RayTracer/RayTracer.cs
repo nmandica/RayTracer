@@ -167,58 +167,67 @@ namespace RayTracer
             return info;
         }
 
-        private void GetColor(HitInfo info, Light lt, ColorAccumulator ca, int count)
+        private void GetColor(HitInfo info, Light light, ColorAccumulator colorAccu, int count)
         {
-            Vector3D lightNormal = info.hitPoint - lt.Location;
+            Vector3D lightLocation = light.Location;
+            Vector3D lightNormal = info.hitPoint - lightLocation;
             lightNormal.Normalize();
 
-            if (InShadow(info, lt, lightNormal))
+            if (InShadow(info, lightLocation, lightNormal))
             {
                 return;
             }
 
             double lambert = Vector3D.DotProduct(lightNormal, info.normal);
+
             if (lambert <= 0)
             {
                 int r, g, b;
-                r = b = g = 0;
+                r = g = b = 0;
 
                 int r2 = 0;
                 int g2 = 0;
                 int b2 = 0;
 
                 info.hitObj.GetColor(info.hitPoint, ref r, ref g, ref b);
+
                 if (info.hitObj.Material != null && info.hitObj.Material is SolidColor)
                 {
                     double phongTerm = Math.Pow(lambert, 20) * (info.hitObj.Material as SolidColor).Phong * 2;
-                    r2 = (int)(lt.Color.R * phongTerm);
-                    g2 = (int)(lt.Color.G * phongTerm);
-                    b2 = (int)(lt.Color.B * phongTerm);
+                    r2 = (int)(light.Color.R * phongTerm);
+                    g2 = (int)(light.Color.G * phongTerm);
+                    b2 = (int)(light.Color.B * phongTerm);
                     double reflet = 2.0f * (Vector3D.DotProduct(info.normal, info.ray.Direction));
                     Vector3D dir = info.ray.Direction - info.normal * reflet;
                     Ray reflect = new Ray(info.hitPoint + dir, dir);
                     ColorAccumulator rca = CastRay(reflect, ++count);
+
                     if (rca != null)
                     {
-                        ca.accumR = ca.accumR + rca.accumR;
-                        ca.accumG = ca.accumG + rca.accumG;
-                        ca.accumB = ca.accumB + rca.accumB;
+                        colorAccu.accumR = colorAccu.accumR + rca.accumR;
+                        colorAccu.accumG = colorAccu.accumG + rca.accumG;
+                        colorAccu.accumB = colorAccu.accumB + rca.accumB;
                     }
                 }
-                ca.accumR += (int)((lt.Color.R * r * -lambert) / 255) + r2;
-                ca.accumG += (int)((lt.Color.G * g * -lambert) / 255) + g2;
-                ca.accumB += (int)((lt.Color.B * b * -lambert) / 255) + b2;
+
+                colorAccu.accumR += (int)((light.Color.R * r * -lambert) / 255) + r2;
+                colorAccu.accumG += (int)((light.Color.G * g * -lambert) / 255) + g2;
+                colorAccu.accumB += (int)((light.Color.B * b * -lambert) / 255) + b2;
             }
         }
 
-        private bool InShadow(HitInfo info, Light lt, Vector3D lightNormal)
+        private bool InShadow(HitInfo info, Vector3D lightLocation, Vector3D lightNormal)
         {
-            Ray shadowRay = new Ray(lt.Location, lightNormal);
-            HitInfo shadinfo = FindHitObject(shadowRay, info.hitObj, HitMode.Closest);
-            if (shadinfo.hitObj != null && Vector3D.Subtract(lt.Location, info.hitPoint).Length > Vector3D.Subtract(lt.Location, shadinfo.hitPoint).Length)
+            Ray shadowRay = new Ray(lightLocation, lightNormal);
+            HitInfo shadingInfo = FindHitObject(shadowRay, info.hitObj, HitMode.Closest);
+
+            if (shadingInfo.hitObj != null && 
+                Vector3D.Subtract(lightLocation, info.hitPoint).Length > 
+                Vector3D.Subtract(lightLocation, shadingInfo.hitPoint).Length)
             {
                 return true;
             }
+
             return false;
         }
 
@@ -227,6 +236,7 @@ namespace RayTracer
             current = 0;
             double segmentsize = Math.Ceiling(Size.Height / (double)processorCount);
             List<Thread> threads = new List<Thread>();
+
             for (int i = 0; i < processorCount; i++)
             {
                 int start = 0 + (int)(i * segmentsize);

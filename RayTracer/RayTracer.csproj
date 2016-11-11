@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomExtensions.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="RayTracer.cs" />
     <Compile Include="Rectangle.cs" />

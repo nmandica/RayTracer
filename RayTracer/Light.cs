@@ -14,6 +14,8 @@ namespace RayTracer
     public class Light
     {
         private Color color = Color.White;
+        private Vector3D location;
+        private double radius = 3;
 
         /// <summary>
         /// Light color
@@ -35,7 +37,24 @@ namespace RayTracer
         /// </summary>
         public Vector3D Location
         {
-            get; set;
+            get
+            {
+                Vector3D randomLocation;
+                var r = new Random();
+                var x = r.NextGaussian();
+                var y = r.NextGaussian();
+                var z = r.NextGaussian();
+
+                randomLocation = new Vector3D(x, y, z);
+                randomLocation.Normalize();
+                randomLocation = radius * randomLocation + location;
+                //Console.WriteLine(randomLocation.ToString());
+                return randomLocation;
+            }
+            set
+            {
+                location = value;
+            }
         }
     }
 }

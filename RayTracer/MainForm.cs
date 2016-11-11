@@ -23,7 +23,7 @@ namespace RayTracer
             InitializeComponent();
             rayTracer = new Raytracer();
             rayTracer.OnProgress += new Raytracer.ProgressHandler(rt_OnProgress);
-            RayDepthNumericUpDown.Value = rayTracer.RayDepth = 3;
+            RayDepthNumericUpDown.Value = rayTracer.RayDepth = 1;
             RayDepthNumericUpDown.ValueChanged += new EventHandler(RayDepthNumericUpDown_ValueChanged);
         }
 

@@ -63,11 +63,45 @@ namespace RayTracer
         /// <param name="point2">Second point</param>
         /// <param name="point3">Third point</param>
         /// <param name="point4">Fourth point</param>
+        [Newtonsoft.Json.JsonConstructor]
         public Rectangle(Point3D point1, Point3D point2, Point3D point3, Point3D point4)
         {
             if (!Rectangle.Exists(point1, point2, point3, point4))
             {
                 throw new Exception();
+            }
+
+            Point1 = point1;
+            Point2 = point2;
+            Point3 = point3;
+            Point4 = point4;
+
+            normal = Vector3D.CrossProduct(Point2 - Point1, Point3 - Point2);
+            normal.Normalize();
+        }
+
+        /// <summary>
+        /// Constructor with 3 points. Throw exception if the given points cannot form a rectangle.
+        /// </summary>
+        /// <param name="point1">First point</param>
+        /// <param name="point2">Second point</param>
+        /// <param name="point3">Third point</param>
+        public Rectangle(Point3D point1, Point3D point2, Point3D point3)
+        {
+            Point3D point4 = point1 + (point2 - point1) + (point3 - point1);
+            if (!Rectangle.Exists(point1, point2, point3, point4))
+            {
+                point4 = point2 + (point1 - point2) + (point3 - point2);
+
+                if (!Rectangle.Exists(point1, point2, point3, point4))
+                {
+                    point4 = point3 + (point1 - point3) + (point2 - point3);
+
+                    if (!Rectangle.Exists(point1, point2, point3, point4))
+                    {
+                        throw new Exception();
+                    }
+                }
             }
 
             Point1 = point1;
