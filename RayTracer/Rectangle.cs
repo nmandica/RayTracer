@@ -10,7 +10,7 @@ namespace RayTracer
     /// <summary>
     /// Rectangle class
     /// </summary>
-    class Rectangle: Geometry
+    public class Rectangle: Geometry
     {
         public readonly Point3D Point1;
         public readonly Point3D Point2;

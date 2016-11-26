@@ -87,7 +87,14 @@ namespace RayTracer
         {
             get
             {
-                return lights;
+                var subLights = new List<Light>();
+
+                foreach (var light in lights)
+                {
+                    subLights.AddRange(light.RandomSubLights());
+                }
+
+                return subLights;
             }
             set
             {

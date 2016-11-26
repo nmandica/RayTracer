@@ -2,7 +2,7 @@
   "Camera": {
     "Location": "0,20,50",
     "LookAt": "0,0,0",
-    "FocalLength": 5
+    "FocalLength": 8
   },
   "Geometries": [
     {
@@ -35,7 +35,7 @@
   "Lights": [
     {
       "Color": "White",
-      "Location": "300,40,300"
+      "Location": "3000,400,3000"
     }
   ]
 }
