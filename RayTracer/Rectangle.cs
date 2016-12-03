@@ -89,25 +89,42 @@ namespace RayTracer
         public Rectangle(Point3D point1, Point3D point2, Point3D point3)
         {
             Point3D point4 = point1 + (point2 - point1) + (point3 - point1);
-            if (!Rectangle.Exists(point1, point2, point3, point4))
+
+            if (Rectangle.Exists(point3, point1, point2, point4))
+            {
+                Point1 = point3;
+                Point2 = point1;
+                Point3 = point2;
+                Point4 = point4;
+            }
+            else
             {
                 point4 = point2 + (point1 - point2) + (point3 - point2);
 
-                if (!Rectangle.Exists(point1, point2, point3, point4))
+                if (Rectangle.Exists(point1, point2, point3, point4))
+                {
+                    Point1 = point1;
+                    Point2 = point2;
+                    Point3 = point3;
+                    Point4 = point4;
+                }
+                else
                 {
                     point4 = point3 + (point1 - point3) + (point2 - point3);
 
-                    if (!Rectangle.Exists(point1, point2, point3, point4))
+                    if (Rectangle.Exists(point1, point3, point2, point4))
+                    {
+                        Point1 = point1;
+                        Point2 = point3;
+                        Point3 = point2;
+                        Point4 = point4;
+                    }
+                    else
                     {
                         throw new Exception();
                     }
                 }
             }
-
-            Point1 = point1;
-            Point2 = point2;
-            Point3 = point3;
-            Point4 = point4;
 
             normal = Vector3D.CrossProduct(Point2 - Point1, Point3 - Point2);
             normal.Normalize();

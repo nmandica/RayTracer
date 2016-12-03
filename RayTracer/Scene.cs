@@ -42,11 +42,11 @@ namespace RayTracer
         {
             using (JsonReader reader = new JsonTextReader(new StreamReader(filePath)))
             {
-                JsonSerializer ser = new JsonSerializer();
-                ser.NullValueHandling = NullValueHandling.Ignore;
-                ser.TypeNameHandling = TypeNameHandling.Auto;
-                ser.ObjectCreationHandling = ObjectCreationHandling.Replace;
-                return ser.Deserialize<Scene>(reader);
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                serializer.ObjectCreationHandling = ObjectCreationHandling.Replace;
+                return serializer.Deserialize<Scene>(reader);
             }
         }
 
@@ -76,7 +76,28 @@ namespace RayTracer
             }
             set
             {
-                geometries = value;
+                var basicGeometries = new List<Geometry>();
+                geometries = new List<Geometry>();
+
+                foreach (var geometry in value)
+                {
+                    if (geometry is Box)
+                    {
+                        var material = geometry.Material;
+                        var listOfFaces = (geometry as Box).Faces;
+
+                        foreach (var face in listOfFaces)
+                        {
+                            face.Material = material;
+                        }
+
+                        geometries.AddRange(listOfFaces);
+                    }
+                    else
+                    {
+                        geometries.Add(geometry);
+                    }
+                }
             }
         }
 

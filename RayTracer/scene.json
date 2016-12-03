@@ -1,6 +1,6 @@
 {
   "Camera": {
-    "Location": "0,20,50",
+    "Location": "0,200,70",
     "LookAt": "0,0,0",
     "FocalLength": 8
   },
@@ -14,7 +14,19 @@
         "r": 255,
         "g": 0,
         "b": 0,
-        "Phong": 0.5
+        "Phong": 1.5
+      }
+    },
+    {
+      "$type": "RayTracer.Sphere, RayTracer",
+      "Center": "-30,-30,22",
+      "Radius": 12.0,
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 255,
+        "b": 0,
+        "Phong": 1.5
       }
     },
     {
@@ -30,12 +42,28 @@
         "b": 255,
         "Phong": 0.0
       }
+    },
+    {
+      "$type": "RayTracer.Box, RayTracer",
+      "origin": "-40,-40,0",
+      "width": 30,
+      "length": 20,
+      "height": 10,
+      "xRotation": 0.0,
+      "zRotation": 0.0,
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 0,
+        "g": 255,
+        "b": 0,
+        "Phong": 0.0
+      }
     }
   ],
   "Lights": [
     {
       "Color": "White",
-      "Location": "3000,400,3000"
+      "Location": "3000,1000,2300"
     }
   ]
 }

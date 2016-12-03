@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Box.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Geometry.cs" />
