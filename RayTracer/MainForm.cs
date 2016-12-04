@@ -84,6 +84,7 @@ namespace RayTracer
                 try
                 {
                     scene = Scene.Load(ofd.FileName);
+                    GoButton.Enabled = true;
                 }
                 catch (Exception ex)
                 {

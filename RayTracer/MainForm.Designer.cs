@@ -44,11 +44,11 @@
             this.ControlPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RayDepthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).BeginInit();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ControlPanel
             // 
+            this.ControlPanel.BackColor = System.Drawing.Color.White;
             this.ControlPanel.Controls.Add(this.LoadButton);
             this.ControlPanel.Controls.Add(this.label1);
             this.ControlPanel.Controls.Add(this.RayDepthNumericUpDown);
@@ -113,6 +113,7 @@
             // 
             this.GoButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.GoButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.GoButton.Enabled = false;
             this.GoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GoButton.ForeColor = System.Drawing.Color.LimeGreen;
             this.GoButton.Location = new System.Drawing.Point(1624, 0);
@@ -126,12 +127,12 @@
             // 
             // PictureBox
             // 
-            this.PictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PictureBox.BackColor = System.Drawing.Color.White;
             this.PictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PictureBox.Location = new System.Drawing.Point(0, 0);
+            this.PictureBox.Location = new System.Drawing.Point(0, 58);
             this.PictureBox.Margin = new System.Windows.Forms.Padding(6);
             this.PictureBox.Name = "PictureBox";
-            this.PictureBox.Size = new System.Drawing.Size(1774, 1292);
+            this.PictureBox.Size = new System.Drawing.Size(1774, 1249);
             this.PictureBox.TabIndex = 5;
             this.PictureBox.TabStop = false;
             // 
@@ -171,10 +172,10 @@
             // 
             this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.statusStrip1.Location = new System.Drawing.Point(0, 1292);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1307);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1774, 37);
+            this.statusStrip1.Size = new System.Drawing.Size(1774, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -182,9 +183,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1774, 1329);
-            this.Controls.Add(this.ControlPanel);
             this.Controls.Add(this.PictureBox);
+            this.Controls.Add(this.ControlPanel);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -195,8 +197,6 @@
             this.ControlPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RayDepthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
