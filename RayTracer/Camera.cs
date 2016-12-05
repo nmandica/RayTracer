@@ -93,13 +93,10 @@ namespace RayTracer
             xIncVector = (U * viewPlaneWidth) / Width;
             yIncVector = (V * viewPlaneHeight) / Height;
 
-            Console.WriteLine("xIncVec : " + xIncVector.ToString());
-            Console.WriteLine("yIncVec : " + yIncVector.ToString());
-            Console.WriteLine("Width : " + Width.ToString());
-            Console.WriteLine("Height : " + Height.ToString());
-
-
-
+            //Console.WriteLine("xIncVec : " + xIncVector.ToString());
+            //Console.WriteLine("yIncVec : " + yIncVector.ToString());
+            //Console.WriteLine("Width : " + Width.ToString());
+            //Console.WriteLine("Height : " + Height.ToString());
         }
 
         /// <summary>

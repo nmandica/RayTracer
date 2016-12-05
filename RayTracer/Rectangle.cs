@@ -68,6 +68,7 @@ namespace RayTracer
         {
             if (!Rectangle.Exists(point1, point2, point3, point4))
             {
+                System.Windows.Forms.MessageBox.Show("A Rectangle has not been created");
                 throw new Exception();
             }
 

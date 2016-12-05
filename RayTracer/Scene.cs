@@ -81,14 +81,14 @@ namespace RayTracer
 
                 foreach (var geometry in value)
                 {
-                    if (geometry is Box)
+                    if (geometry is Box) //Decompose the box in faces
                     {
                         var material = geometry.Material;
                         var listOfFaces = (geometry as Box).Faces;
 
                         foreach (var face in listOfFaces)
                         {
-                            face.Material = material;
+                            face.Material = material; //Give to each face the material of the box
                         }
 
                         geometries.AddRange(listOfFaces);

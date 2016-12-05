@@ -11,9 +11,11 @@ namespace RayTracer
 {
     internal class Raytracer
     {
+        private int pixelSubdivision = 1;
+
+        private object RandomLock = new object();
         private object callbackLock = new object();
         private Graphics graphic;
-        private Object graphicsLock = new object();
         private int processorCount;
         private bool stop = false;
         private Action updateCallback;
@@ -24,7 +26,8 @@ namespace RayTracer
 
         public Raytracer()
         {
-            processorCount = Math.Max(Environment.ProcessorCount - 1, 1);
+            //processorCount = Math.Max(Environment.ProcessorCount - 1, 1);
+            processorCount = 1; //Bug if multi thread
         }
 
         private void DoProgress(double percent)
@@ -72,8 +75,8 @@ namespace RayTracer
         public void Raytrace(Image image, Action onUpdate, Action onFinished)
         {
             Size = new Size(image.Width, image.Height);
-            Scene.Camera.Width = image.Width;
-            Scene.Camera.Height = image.Height;
+            Scene.Camera.Width = image.Width * pixelSubdivision;
+            Scene.Camera.Height = image.Height * pixelSubdivision;
             Scene.Camera.Setup();
 
             updateCallback = onUpdate;
@@ -104,13 +107,28 @@ namespace RayTracer
                 return;
             }
 
-            Ray ray = Scene.Camera.GetCameraRay(col, row);
+            int r = 0, g = 0, b = 0;
 
-            ColorAccumulator colorAccu = CastRay(ray, 1);
+            for (int i = col * pixelSubdivision; i < (col + 1) * pixelSubdivision; i++)
+            {
+                for (int j = row * pixelSubdivision; j < (row + 1) * pixelSubdivision; j++)
+                {
+                    var ray = Scene.Camera.GetCameraRay(i, j);
+                    var colorAccu = CastRay(ray, 1);
 
-            SolidBrush brush = new SolidBrush(Color.FromArgb(colorAccu.accumR, colorAccu.accumG, colorAccu.accumB));
+                    r += colorAccu.accumR;
+                    g += colorAccu.accumG;
+                    b += colorAccu.accumB;
+                }
+            }
 
-            lock (graphicsLock)
+            r /= pixelSubdivision * pixelSubdivision;
+            g /= pixelSubdivision * pixelSubdivision;
+            b /= pixelSubdivision * pixelSubdivision;
+
+            SolidBrush brush = new SolidBrush(Color.FromArgb(r, g, b));
+
+            lock (graphic)
             {
                 graphic.FillRectangle(brush, col, row, 1, 1);
             }
@@ -164,6 +182,7 @@ namespace RayTracer
                     }
                 }
             }
+
             return info;
         }
 
@@ -191,28 +210,48 @@ namespace RayTracer
 
                 info.hitObj.GetColor(info.hitPoint, ref r, ref g, ref b);
 
-                if (info.hitObj.Material != null && info.hitObj.Material is SolidColor)
+                if (info.hitObj.Material != null)
                 {
-                    double phongTerm = Math.Pow(lambert, 20) * (info.hitObj.Material as SolidColor).Phong * 2;
-                    r2 = (int)(light.Color.R * phongTerm);
-                    g2 = (int)(light.Color.G * phongTerm);
-                    b2 = (int)(light.Color.B * phongTerm);
-                    double reflet = 2.0f * (Vector3D.DotProduct(info.normal, info.ray.Direction));
-                    Vector3D dir = info.ray.Direction - info.normal * reflet;
-                    Ray reflect = new Ray(info.hitPoint + dir, dir);
-                    ColorAccumulator rca = CastRay(reflect, ++count);
+                    var objectMaterial = info.hitObj.Material;
 
-                    if (rca != null)
+                    if (info.hitObj is Sphere)
                     {
-                        colorAccu.accumR = colorAccu.accumR + rca.accumR;
-                        colorAccu.accumG = colorAccu.accumG + rca.accumG;
-                        colorAccu.accumB = colorAccu.accumB + rca.accumB;
+                        //te
+                    }
+
+                    //Phong
+                    if (objectMaterial is SolidColor)
+                    {
+                        double phongTerm = Math.Pow(lambert, 20) * (objectMaterial as SolidColor).Phong * 2;
+                        r2 = (int)(light.Color.R * phongTerm);
+                        g2 = (int)(light.Color.G * phongTerm);
+                        b2 = (int)(light.Color.B * phongTerm);
+
+                        colorAccu.accumR += (int)((light.Color.R * r * -lambert) / 255) + r2;
+                        colorAccu.accumG += (int)((light.Color.G * g * -lambert) / 255) + g2;
+                        colorAccu.accumB += (int)((light.Color.B * b * -lambert) / 255) + b2;
+                    }    
+                    //Reflection
+                    else if (objectMaterial is Metal)
+                    {
+                        double phongTerm = Math.Pow(lambert, 20) * 0.5 * 2;
+                        r2 = (int)(light.Color.R * phongTerm);
+                        g2 = (int)(light.Color.G * phongTerm);
+                        b2 = (int)(light.Color.B * phongTerm);
+
+                        double reflet = 2.0f * (Vector3D.DotProduct(info.normal, info.ray.Direction));
+                        Vector3D direction = info.ray.Direction - info.normal * reflet;
+                        Ray reflect = new Ray(info.hitPoint + direction, direction + (objectMaterial as Metal).Fuzz * StaticRandom.RandomVectorInUnitSphere());
+                        ColorAccumulator reflectedColorAccu = CastRay(reflect, ++count);
+
+                        if (reflectedColorAccu != null)
+                        {
+                            colorAccu.accumR += (int)(reflectedColorAccu.accumR * (objectMaterial as Metal).Reflexivity) + r2;
+                            colorAccu.accumG += (int)(reflectedColorAccu.accumG * (objectMaterial as Metal).Reflexivity) + g2;
+                            colorAccu.accumB += (int)(reflectedColorAccu.accumB * (objectMaterial as Metal).Reflexivity) + b2;
+                        }
                     }
                 }
-
-                colorAccu.accumR += (int)((light.Color.R * r * -lambert) / 255) + r2;
-                colorAccu.accumG += (int)((light.Color.G * g * -lambert) / 255) + g2;
-                colorAccu.accumB += (int)((light.Color.B * b * -lambert) / 255) + b2;
             }
         }
 

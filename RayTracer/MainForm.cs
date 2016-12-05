@@ -23,7 +23,7 @@ namespace RayTracer
             InitializeComponent();
             rayTracer = new Raytracer();
             rayTracer.OnProgress += new Raytracer.ProgressHandler(rt_OnProgress);
-            RayDepthNumericUpDown.Value = rayTracer.RayDepth = 1;
+            RayDepthNumericUpDown.Value = rayTracer.RayDepth = 3;
             RayDepthNumericUpDown.ValueChanged += new EventHandler(RayDepthNumericUpDown_ValueChanged);
         }
 
@@ -77,13 +77,14 @@ namespace RayTracer
 
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "JSON Scene|*.json";
-            if (ofd.ShowDialog() == DialogResult.OK)
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JSON Scene|*.json";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    scene = Scene.Load(ofd.FileName);
+                    scene = Scene.Load(openFileDialog.FileName);
                     GoButton.Enabled = true;
                 }
                 catch (Exception ex)
@@ -92,7 +93,7 @@ namespace RayTracer
                     return;
                 }
 
-                tsslblScene.Text = Path.GetFileName(ofd.FileName);
+                tsslblScene.Text = Path.GetFileName(openFileDialog.FileName);
                 ControlPanel.Enabled = true;
 
             }

@@ -15,11 +15,11 @@ namespace RayTracer
     {
         private Color color = Color.White;
         private Vector3D location;
-        private double radius = 200;
+        private double radius = 100;
         /// <summary>
         /// Number of sub-lights on the light sphere
         /// </summary>
-        private int numberOfSubLights = 4;
+        private int numberOfSubLights = 5;
 
         /// <summary>
         /// Light color
@@ -28,14 +28,14 @@ namespace RayTracer
         {
             get
             {
-                return Color.FromArgb(color.A,
-                    color.R / numberOfSubLights,
-                    color.G / numberOfSubLights,
-                    color.B / numberOfSubLights);
+                return color;
             }
             set
             {
-                color = value;
+                color = Color.FromArgb(value.A,
+                                       (int) Math.Ceiling(((double) value.R) / numberOfSubLights),
+                                       (int) Math.Ceiling(((double) value.G) / numberOfSubLights),
+                                       (int) Math.Ceiling(((double) value.B) / numberOfSubLights));
             }
         }
 
@@ -55,19 +55,18 @@ namespace RayTracer
         }
 
         /// <summary>
-        /// Random sub-light location on the light sphere
+        /// Light source sphere radius
         /// </summary>
-        private Vector3D RandomSubLightLocation()
+        public double Radius
         {
-                var x = StaticRandom.NextGaussian();
-                var y = StaticRandom.NextGaussian();
-                var z = StaticRandom.NextGaussian();
-
-                var randomLocation = new Vector3D(x, y, z);
-                randomLocation.Normalize();
-                randomLocation = radius * randomLocation + location;
-                //Console.WriteLine(randomLocation.ToString());
-                return randomLocation;
+            get
+            {
+                return radius;
+            }
+            set
+            {
+                radius = value;
+            }
         }
 
         /// <summary>
@@ -81,8 +80,8 @@ namespace RayTracer
             for (int i = 0; i < numberOfSubLights; i++)
             {
                 var randomLight = new Light();
-                randomLight.Color = color;
-                randomLight.Location = RandomSubLightLocation();
+                randomLight.color = color;
+                randomLight.Location = StaticRandom.RandomVectorInSphere(location, radius);
 
                 randomList.Add(randomLight);
             }
