@@ -11,7 +11,7 @@ namespace RayTracer
 {
     internal class Raytracer
     {
-        private int pixelSubdivision = 1;
+        private int pixelSubdivision = 10;
 
         private object RandomLock = new object();
         private object callbackLock = new object();

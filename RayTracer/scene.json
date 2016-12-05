@@ -2,7 +2,7 @@
   "Camera": {
     "Location": "0,200,70",
     "LookAt": "0,0,10",
-    "FocalLength": 5
+    "FocalLength": 50
   },
   "Geometries": [
     {
