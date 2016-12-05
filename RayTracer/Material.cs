@@ -53,8 +53,8 @@ namespace RayTracer
     public class Metal : IMaterial
     {
         public int r, g, b;
-        public double Fuzz = 0;
-        public double Reflexivity = 1; //max = 1, min = 0
+        public double Fuzz = 0; //0 is a clean reflection
+        public double Reflection = 1; //max = 1, min = 0
 
         public static SolidColor Default = new SolidColor(255, 255, 255);
         public static SolidColor Black = new SolidColor(0, 0, 0);

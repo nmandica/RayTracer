@@ -246,9 +246,9 @@ namespace RayTracer
 
                         if (reflectedColorAccu != null)
                         {
-                            colorAccu.accumR += (int)(reflectedColorAccu.accumR * (objectMaterial as Metal).Reflexivity) + r2;
-                            colorAccu.accumG += (int)(reflectedColorAccu.accumG * (objectMaterial as Metal).Reflexivity) + g2;
-                            colorAccu.accumB += (int)(reflectedColorAccu.accumB * (objectMaterial as Metal).Reflexivity) + b2;
+                            colorAccu.accumR += (int)(reflectedColorAccu.accumR * (objectMaterial as Metal).Reflection) + r2;
+                            colorAccu.accumG += (int)(reflectedColorAccu.accumG * (objectMaterial as Metal).Reflection) + g2;
+                            colorAccu.accumB += (int)(reflectedColorAccu.accumB * (objectMaterial as Metal).Reflection) + b2;
                         }
                     }
                 }
