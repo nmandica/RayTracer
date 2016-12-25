@@ -16,10 +16,10 @@ namespace RayTracer
         public Vector3D Center;
         public double Radius;
 
-        public Sphere(Vector3D pos, double r)
+        public Sphere(Vector3D location, double radius)
         {
-            Radius = r;
-            Center = pos;
+            Radius = radius;
+            Center = location;
         }
 
         public override Vector3D GetSurfaceNormalAtPoint(Vector3D point)

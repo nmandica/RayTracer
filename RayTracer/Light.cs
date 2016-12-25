@@ -21,6 +21,23 @@ namespace RayTracer
         /// </summary>
         private int numberOfSubLights = 5;
 
+        private double intensity = 1;
+
+        /// <summary>
+        /// Light intensity
+        /// </summary>
+        public double Intensity
+        {
+            get
+            {
+                return intensity;
+            }
+            set
+            {
+                intensity = value;
+            }
+        }
+
         /// <summary>
         /// Light color
         /// </summary>
@@ -32,10 +49,7 @@ namespace RayTracer
             }
             set
             {
-                color = Color.FromArgb(value.A,
-                                       (int) Math.Ceiling(((double) value.R) / numberOfSubLights),
-                                       (int) Math.Ceiling(((double) value.G) / numberOfSubLights),
-                                       (int) Math.Ceiling(((double) value.B) / numberOfSubLights));
+                color = value;
             }
         }
 
@@ -76,11 +90,13 @@ namespace RayTracer
         public List<Light> RandomSubLights()
         {
             var randomList = new List<Light>();
+            var dividedIntensity = intensity / numberOfSubLights;
 
             for (int i = 0; i < numberOfSubLights; i++)
             {
                 var randomLight = new Light();
                 randomLight.color = color;
+                randomLight.intensity = dividedIntensity;
                 randomLight.Location = StaticRandom.RandomVectorInSphere(location, radius);
 
                 randomList.Add(randomLight);

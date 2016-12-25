@@ -77,6 +77,7 @@ namespace RayTracer
             Size = new Size(image.Width, image.Height);
             Scene.Camera.Width = image.Width * pixelSubdivision;
             Scene.Camera.Height = image.Height * pixelSubdivision;
+            Scene.Camera.FocalLength *= pixelSubdivision;
             Scene.Camera.Setup();
 
             updateCallback = onUpdate;
@@ -95,6 +96,18 @@ namespace RayTracer
             foreach (Light light in Scene.Lights)
             {
                 GetColor(info, light, colorAccumulator, count);
+
+                //Bidirectional ray tracing
+                var randomDirection = StaticRandom.RandomVectorInUnitSphere();
+                var randomRay = new Ray(light.Location + randomDirection, randomDirection);
+                var hitInfo = FindHitObject(randomRay);
+                var secondaryLight = new Light();
+                secondaryLight.Location = hitInfo.hitPoint - randomRay.Direction;
+                int squaredDistance = (int)(secondaryLight.Location - randomRay.Source).LengthSquared + 1;
+                secondaryLight.Color = light.Color;
+                secondaryLight.Intensity = light.Intensity / squaredDistance;
+
+                GetColor(info, secondaryLight, colorAccumulator, count);
             }
 
             return colorAccumulator;
@@ -115,6 +128,7 @@ namespace RayTracer
                 {
                     var ray = Scene.Camera.GetCameraRay(i, j);
                     var colorAccu = CastRay(ray, 1);
+                    colorAccu.Clamp();
 
                     r += colorAccu.accumR;
                     g += colorAccu.accumG;
@@ -147,7 +161,7 @@ namespace RayTracer
             if (info.hitObj != null)
             {
                 colorAccumulator = CalculateLighting(info, count);
-                colorAccumulator.Clamp();
+                //colorAccumulator.Clamp();
             }
             else
             {
@@ -192,11 +206,6 @@ namespace RayTracer
             Vector3D lightNormal = info.hitPoint - lightLocation;
             lightNormal.Normalize();
 
-            if (InShadow(info, lightLocation, lightNormal))
-            {
-                return;
-            }
-
             double lambert = Vector3D.DotProduct(lightNormal, info.normal);
 
             if (lambert <= 0)
@@ -214,41 +223,44 @@ namespace RayTracer
                 {
                     var objectMaterial = info.hitObj.Material;
 
-                    if (info.hitObj is Sphere)
-                    {
-                        //te
-                    }
-
                     //Phong
                     if (objectMaterial is SolidColor)
                     {
-                        double phongTerm = Math.Pow(lambert, 20) * (objectMaterial as SolidColor).Phong * 2;
+                        if (InShadow(info, lightLocation, lightNormal))
+                        {
+                            return;
+                        }
+
+                        double phongTerm = Math.Pow(lambert, 20) * (objectMaterial as SolidColor).Phong * 2 * light.Intensity;
                         r2 = (int)(light.Color.R * phongTerm);
                         g2 = (int)(light.Color.G * phongTerm);
                         b2 = (int)(light.Color.B * phongTerm);
 
-                        colorAccu.accumR += (int)((light.Color.R * r * -lambert) / 255) + r2;
-                        colorAccu.accumG += (int)((light.Color.G * g * -lambert) / 255) + g2;
-                        colorAccu.accumB += (int)((light.Color.B * b * -lambert) / 255) + b2;
+                        colorAccu.accumR += (int)((light.Color.R * light.Intensity * r * -lambert) / 255) + r2;
+                        colorAccu.accumG += (int)((light.Color.G * light.Intensity * g * -lambert) / 255) + g2;
+                        colorAccu.accumB += (int)((light.Color.B * light.Intensity * b * -lambert) / 255) + b2;
                     }    
                     //Reflection
                     else if (objectMaterial is Metal)
                     {
-                        double phongTerm = Math.Pow(lambert, 20) * 0.5 * 2;
+                        double phongTerm = Math.Pow(lambert, 20) * 0.6 * 2 * light.Intensity;
                         r2 = (int)(light.Color.R * phongTerm);
                         g2 = (int)(light.Color.G * phongTerm);
                         b2 = (int)(light.Color.B * phongTerm);
 
                         double reflet = 2.0f * (Vector3D.DotProduct(info.normal, info.ray.Direction));
                         Vector3D direction = info.ray.Direction - info.normal * reflet;
-                        Ray reflect = new Ray(info.hitPoint + direction, direction + (objectMaterial as Metal).Fuzz * StaticRandom.RandomVectorInUnitSphere());
+                        direction += (objectMaterial as Metal).Fuzz * StaticRandom.RandomVectorInUnitSphere();
+                        direction.Normalize();
+                        Ray reflect = new Ray(info.hitPoint + direction, direction);
                         ColorAccumulator reflectedColorAccu = CastRay(reflect, ++count);
 
                         if (reflectedColorAccu != null)
                         {
-                            colorAccu.accumR += (int)(reflectedColorAccu.accumR * (objectMaterial as Metal).Reflection) + r2;
-                            colorAccu.accumG += (int)(reflectedColorAccu.accumG * (objectMaterial as Metal).Reflection) + g2;
-                            colorAccu.accumB += (int)(reflectedColorAccu.accumB * (objectMaterial as Metal).Reflection) + b2;
+                            var attenuation = 1.1 * (objectMaterial as Metal).Reflection * light.Intensity;
+                            colorAccu.accumR += (int)(reflectedColorAccu.accumR * attenuation) + r2;
+                            colorAccu.accumG += (int)(reflectedColorAccu.accumG * attenuation) + g2;
+                            colorAccu.accumB += (int)(reflectedColorAccu.accumB * attenuation) + b2;
                         }
                     }
                 }

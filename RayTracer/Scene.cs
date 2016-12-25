@@ -98,6 +98,13 @@ namespace RayTracer
                         geometries.Add(geometry);
                     }
                 }
+
+                //foreach (var light in lights)
+                //{
+                //    var lightSphere = new Sphere(light.Location, light.Radius);
+                //    lightSphere.Material = new SolidColor(255, 255, 255);
+                //    geometries.Add(lightSphere);
+                //}
             }
         }
 

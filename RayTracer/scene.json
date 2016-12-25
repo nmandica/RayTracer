@@ -1,8 +1,8 @@
 {
   "Camera": {
-    "Location": "0,200,70",
+    "Location": "0,190,70",
     "LookAt": "0,0,10",
-    "FocalLength": 50
+    "FocalLength": 5
   },
   "Geometries": [
     {
@@ -14,6 +14,7 @@
         "r": 200,
         "g": 200,
         "b": 200,
+        "Reflection": 0.7,
         "Fuzz": 0.05
       }
     },
@@ -40,6 +41,76 @@
         "r": 0,
         "g": 0,
         "b": 255,
+        "Phong": 0.0
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "-200,-200,200",
+      "Point2": "200,-200,200",
+      "Point3": "200,200,200",
+      "Point4": "-200,200,200",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 0,
+        "g": 0,
+        "b": 255,
+        "Phong": 0.0
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "-200,-200,0",
+      "Point2": "200,-200,0",
+      "Point3": "200,-200,200",
+      "Point4": "-200,-200,200",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 0,
+        "b": 0,
+        "Phong": 0.0
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "-200,-200,0",
+      "Point2": "-200,200,0",
+      "Point3": "-200,200,200",
+      "Point4": "-200,-200,200",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 0,
+        "b": 0,
+        "Phong": 0.0
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "200,200,0",
+      "Point2": "200,-200,0",
+      "Point3": "200,-200,200",
+      "Point4": "200,200,200",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 0,
+        "b": 0,
+        "Phong": 0.0
+      }
+    },
+    {
+      "$type": "RayTracer.Rectangle, RayTracer",
+      "Point1": "200,200,0",
+      "Point2": "-200,200,0",
+      "Point3": "-200,200,200",
+      "Point4": "200,200,200",
+      "Material": {
+        "$type": "RayTracer.SolidColor, RayTracer",
+        "r": 255,
+        "g": 0,
+        "b": 0,
         "Phong": 0.0
       }
     },
@@ -73,12 +144,12 @@
         "g": 200,
         "b": 200,
         "Fuzz": 0.0,
-        "Reflexivity": 0.9
+        "Reflection": 0.9
       }
     },
     {
       "$type": "RayTracer.Box, RayTracer",
-      "origin": "80,50,0",
+      "origin": "60,40,0",
       "width": 10,
       "length": 10,
       "height": 10,
@@ -89,20 +160,22 @@
         "r": 255,
         "g": 0,
         "b": 255,
-        "Phong": 2.0
+        "Phong": 0.0
       }
     }
   ],
   "Lights": [
     {
       "Color": "White",
-      "Location": "1200,400,1000",
-      "Radius": 100.0
+      "Intensity": 1.5,
+      "Location": "120,40,100",
+      "Radius": 3.0
     },
     {
-      "Color": "100,100,100",
-      "Location": "-1200,-400,500",
-      "Radius":  100.0
+      "Color": "White",
+      "Intensity": 0.7,
+      "Location": "-190,-190,50",
+      "Radius":  2.0
     }
   ]
 }
