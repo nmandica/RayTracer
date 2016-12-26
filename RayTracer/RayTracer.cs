@@ -11,7 +11,7 @@ namespace RayTracer
 {
     internal class Raytracer
     {
-        private int pixelSubdivision = 10;
+        private int pixelSubdivision = 2;
 
         private object RandomLock = new object();
         private object callbackLock = new object();
@@ -121,7 +121,7 @@ namespace RayTracer
             }
 
             int r = 0, g = 0, b = 0;
-
+            //Calculate each pixel with the mean of all the subpixels
             for (int i = col * pixelSubdivision; i < (col + 1) * pixelSubdivision; i++)
             {
                 for (int j = row * pixelSubdivision; j < (row + 1) * pixelSubdivision; j++)
@@ -130,9 +130,9 @@ namespace RayTracer
                     var colorAccu = CastRay(ray, 1);
                     colorAccu.Clamp();
 
-                    r += colorAccu.accumR;
-                    g += colorAccu.accumG;
-                    b += colorAccu.accumB;
+                    r += colorAccu.R;
+                    g += colorAccu.G;
+                    b += colorAccu.B;
                 }
             }
 
@@ -158,7 +158,7 @@ namespace RayTracer
             ColorAccumulator colorAccumulator = null;
             HitInfo info = FindHitObject(ray);
 
-            if (info.hitObj != null)
+            if (info.hitObject != null)
             {
                 colorAccumulator = CalculateLighting(info, count);
                 //colorAccumulator.Clamp();
@@ -177,18 +177,19 @@ namespace RayTracer
         {
             Vector3D intersectionPoint = new Vector3D(double.MaxValue, double.MaxValue, double.MaxValue);
             HitInfo info = new HitInfo(null, intersectionPoint, ray);
-            double dist = double.MaxValue;
+            double distance = double.MaxValue;
 
             foreach (Geometry geometry in Scene.Geometries)
             {
                 if (geometry != originator && geometry.Intersects(ray, ref intersectionPoint))
                 {
-                    double distToObj = Vector3D.Subtract(ray.Source, intersectionPoint).Length;
-                    if (distToObj < dist)
+                    double distanceToObject = Vector3D.Subtract(ray.Source, intersectionPoint).Length;
+                    if (distanceToObject < distance)
                     {
                         info.hitPoint = intersectionPoint;
-                        dist = distToObj;
-                        info.hitObj = geometry;
+                        distance = distanceToObject;
+                        info.hitObject = geometry;
+
                         if (mode == HitMode.Any)
                         {
                             break;
@@ -217,11 +218,11 @@ namespace RayTracer
                 int g2 = 0;
                 int b2 = 0;
 
-                info.hitObj.GetColor(info.hitPoint, ref r, ref g, ref b);
+                info.hitObject.GetColor(info.hitPoint, ref r, ref g, ref b);
 
-                if (info.hitObj.Material != null)
+                if (info.hitObject.Material != null)
                 {
-                    var objectMaterial = info.hitObj.Material;
+                    var objectMaterial = info.hitObject.Material;
 
                     //Phong
                     if (objectMaterial is SolidColor)
@@ -236,31 +237,36 @@ namespace RayTracer
                         g2 = (int)(light.Color.G * phongTerm);
                         b2 = (int)(light.Color.B * phongTerm);
 
-                        colorAccu.accumR += (int)((light.Color.R * light.Intensity * r * -lambert) / 255) + r2;
-                        colorAccu.accumG += (int)((light.Color.G * light.Intensity * g * -lambert) / 255) + g2;
-                        colorAccu.accumB += (int)((light.Color.B * light.Intensity * b * -lambert) / 255) + b2;
+                        var intensityFactor = light.Intensity * -lambert / 255;
+
+                        colorAccu.R += (int)(light.Color.R * r * intensityFactor) + r2;
+                        colorAccu.G += (int)(light.Color.G * g * intensityFactor) + g2;
+                        colorAccu.B += (int)(light.Color.B * b * intensityFactor) + b2;
                     }    
                     //Reflection
                     else if (objectMaterial is Metal)
                     {
-                        double phongTerm = Math.Pow(lambert, 20) * 0.6 * 2 * light.Intensity;
-                        r2 = (int)(light.Color.R * phongTerm);
-                        g2 = (int)(light.Color.G * phongTerm);
-                        b2 = (int)(light.Color.B * phongTerm);
+                        var metal = objectMaterial as Metal;
+
+                        //double phongTerm = Math.Pow(lambert, 20) * 0.6 * 2 * light.Intensity;
+                        //r2 = (int)(light.Color.R * phongTerm);
+                        //g2 = (int)(light.Color.G * phongTerm);
+                        //b2 = (int)(light.Color.B * phongTerm);
 
                         double reflet = 2.0f * (Vector3D.DotProduct(info.normal, info.ray.Direction));
                         Vector3D direction = info.ray.Direction - info.normal * reflet;
-                        direction += (objectMaterial as Metal).Fuzz * StaticRandom.RandomVectorInUnitSphere();
                         direction.Normalize();
-                        Ray reflect = new Ray(info.hitPoint + direction, direction);
+                        direction += metal.Fuzz * StaticRandom.RandomVectorInUnitSphere(); //Random in cone
+                        //direction.Normalize();
+                        Ray reflect = new Ray(info.hitPoint + direction / 100000, direction);
                         ColorAccumulator reflectedColorAccu = CastRay(reflect, ++count);
 
                         if (reflectedColorAccu != null)
                         {
-                            var attenuation = 1.1 * (objectMaterial as Metal).Reflection * light.Intensity;
-                            colorAccu.accumR += (int)(reflectedColorAccu.accumR * attenuation) + r2;
-                            colorAccu.accumG += (int)(reflectedColorAccu.accumG * attenuation) + g2;
-                            colorAccu.accumB += (int)(reflectedColorAccu.accumB * attenuation) + b2;
+                            var attenuation = metal.Reflection * light.Intensity;
+                            colorAccu.R += (int)(reflectedColorAccu.R * attenuation) + r2;
+                            colorAccu.G += (int)(reflectedColorAccu.G * attenuation) + g2;
+                            colorAccu.B += (int)(reflectedColorAccu.B * attenuation) + b2;
                         }
                     }
                 }
@@ -270,9 +276,9 @@ namespace RayTracer
         private bool InShadow(HitInfo info, Vector3D lightLocation, Vector3D lightNormal)
         {
             Ray shadowRay = new Ray(lightLocation, lightNormal);
-            HitInfo shadingInfo = FindHitObject(shadowRay, info.hitObj, HitMode.Closest);
+            HitInfo shadingInfo = FindHitObject(shadowRay, info.hitObject, HitMode.Closest);
 
-            if (shadingInfo.hitObj != null && 
+            if (shadingInfo.hitObject != null && 
                 Vector3D.Subtract(lightLocation, info.hitPoint).Length > 
                 Vector3D.Subtract(lightLocation, shadingInfo.hitPoint).Length)
             {
@@ -285,13 +291,13 @@ namespace RayTracer
         private void Raytrace(Action onFinished)
         {
             current = 0;
-            double segmentsize = Math.Ceiling(Size.Height / (double)processorCount);
+            double segmentSize = Math.Ceiling(Size.Height / (double)processorCount);
             List<Thread> threads = new List<Thread>();
 
             for (int i = 0; i < processorCount; i++)
             {
-                int start = 0 + (int)(i * segmentsize);
-                int stop = Math.Min((int)segmentsize + (int)(i * segmentsize), Size.Height);
+                int start = 0 + (int)(i * segmentSize);
+                int stop = Math.Min((int)segmentSize + (int)(i * segmentSize), Size.Height);
 
                 Thread t = new Thread(() =>
                 {
@@ -362,9 +368,9 @@ namespace RayTracer
 
     internal class ColorAccumulator
     {
-        public int accumB = 0;
-        public int accumG = 0;
-        public int accumR = 0;
+        public int R = 0;
+        public int G = 0;
+        public int B = 0;
 
         public ColorAccumulator()
         {
@@ -372,42 +378,42 @@ namespace RayTracer
 
         public ColorAccumulator(int r, int g, int b)
         {
-            accumR = r;
-            accumG = g;
-            accumB = b;
+            R = r;
+            G = g;
+            B = b;
         }
 
         public static ColorAccumulator operator +(ColorAccumulator left, ColorAccumulator right)
         {
             ColorAccumulator sum = new ColorAccumulator();
-            sum.accumR = left.accumR + right.accumR;
-            sum.accumG = left.accumG + right.accumG;
-            sum.accumB = left.accumB + right.accumB;
+            sum.R = left.R + right.R;
+            sum.G = left.G + right.G;
+            sum.B = left.B + right.B;
             return sum;
         }
 
         public void Clamp()
         {
             double ratio = 1;
-            ratio = Math.Max(accumR / 255.0, ratio);
-            ratio = Math.Max(accumG / 255.0, ratio);
-            ratio = Math.Max(accumB / 255.0, ratio);
+            ratio = Math.Max(R / 255.0, ratio);
+            ratio = Math.Max(G / 255.0, ratio);
+            ratio = Math.Max(B / 255.0, ratio);
 
-            accumR = (int)(accumR / ratio);
-            accumG = (int)(accumG / ratio);
-            accumB = (int)(accumB / ratio);
+            R = (int)(R / ratio);
+            G = (int)(G / ratio);
+            B = (int)(B / ratio);
         }
     }
 
     internal class HitInfo
     {
-        public Geometry hitObj;
+        public Geometry hitObject;
         public Vector3D hitPoint;
         public Ray ray;
 
         public HitInfo(Geometry hitObj, Vector3D hitPoint, Ray ray)
         {
-            this.hitObj = hitObj;
+            this.hitObject = hitObj;
             this.hitPoint = hitPoint;
             this.ray = ray;
         }
@@ -416,13 +422,13 @@ namespace RayTracer
         {
             get
             {
-                if (hitObj != null)
+                if (hitObject != null)
                 {
-                    return hitObj.GetSurfaceNormalAtPoint(hitPoint);
+                    return hitObject.GetNormalAtPoint(hitPoint);
                 }
                 else
                 {
-                    throw new Exception("hitObj is null");
+                    throw new Exception("hitObject is null");
                 }
             }
         }

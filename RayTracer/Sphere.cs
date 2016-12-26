@@ -22,7 +22,7 @@ namespace RayTracer
             Center = location;
         }
 
-        public override Vector3D GetSurfaceNormalAtPoint(Vector3D point)
+        public override Vector3D GetNormalAtPoint(Vector3D point)
         {
             Vector3D normal = point - Center;
             normal.Normalize();
@@ -89,7 +89,9 @@ namespace RayTracer
                 // else the intersection point is at t0
                 distance = t0;
             }
+
             intersectionPoint = ray.Source + ray.Direction * distance;
+
             return true;
         }
     }

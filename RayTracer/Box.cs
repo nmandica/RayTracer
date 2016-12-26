@@ -102,7 +102,7 @@ namespace RayTracer
             faces.Add(faceLeft);
         }
 
-        override public Vector3D GetSurfaceNormalAtPoint(Vector3D point)
+        override public Vector3D GetNormalAtPoint(Vector3D point)
         {
             Vector3D normal = new Vector3D();
             normalsDictionary.TryGetValue(point, out normal);

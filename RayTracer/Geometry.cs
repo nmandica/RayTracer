@@ -48,7 +48,7 @@ namespace RayTracer
         /// </summary>
         /// <param name="point">A point of the surface of the Geometry.</param>
         /// <returns>The normal for the given point.</returns>
-        abstract public Vector3D GetSurfaceNormalAtPoint(Vector3D point);
+        abstract public Vector3D GetNormalAtPoint(Vector3D point);
 
         /// <summary>
         /// Find the point of intersection with the given ray, if any.

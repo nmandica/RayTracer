@@ -167,7 +167,7 @@ namespace RayTracer
             return exists;
         }
 
-        override public Vector3D GetSurfaceNormalAtPoint(Vector3D point) => Normal;
+        override public Vector3D GetNormalAtPoint(Vector3D point) => Normal;
 
         /// <summary>
         /// Calculate the intesection point between the ray and the plane of the rectangle.
@@ -185,17 +185,22 @@ namespace RayTracer
                 if (normalDotProduct > 0)
                 {
                     normal = -Normal;
+                    normalDotProduct = -normalDotProduct;
                 }
 
                 Vector3D Point = (Vector3D) Point1;
-                double t = (Vector3D.DotProduct(Normal, (Vector3D.Subtract(Point, ray.Source)))) / (Vector3D.DotProduct(Normal, ray.Direction));
+                double t = (Vector3D.DotProduct(Normal, (Vector3D.Subtract(Point, ray.Source)))) / normalDotProduct;
 
                 if (t >= 0)
                 {
                     intersectionPoint = ray.Source + (ray.Direction * t);
 
-                    var alpha = Vector3D.DotProduct((Point3D) intersectionPoint - Point1, Point2 - Point1) / (Point2 - Point1).LengthSquared;
-                    var beta = Vector3D.DotProduct((Point3D)intersectionPoint - Point1, Point4 - Point1) / (Point4 - Point1).LengthSquared;
+                    var vec1 = (Point3D)intersectionPoint - Point1;
+                    var vec2 = Point2 - Point1;
+                    var vec3 = Point4 - Point1;
+
+                    var alpha = Vector3D.DotProduct(vec1, vec2) / vec2.LengthSquared;
+                    var beta = Vector3D.DotProduct(vec1, vec3) / vec3.LengthSquared;
 
                     if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1)
                     {
